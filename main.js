@@ -29,6 +29,17 @@ const server = http.createServer((req, res) => {
                 res.end(data);
             }
         });
+    } else if (req.url === '/script.js') {
+            // Читаем и отправляем файл composers.json как JSON
+            fs.readFile(path.join(__dirname, '/script.js'), (err, data) => {
+                if (err) {
+                    res.writeHead(500);
+                    res.end('Error loading script.js');
+                } else {
+                    res.writeHead(200, { 'Content-Type': 'application/js' });
+                    res.end(data);
+                }
+            });
     } else {
         // Обрабатываем другие запросы, например, запросы к другим ресурсам
         res.writeHead(404);

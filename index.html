@@ -72,81 +72,13 @@
 <h1>Composer Data Visualization</h1>
 
 <body>
-
-    <script>
-        // Загружаем JSON-файл с помощью d3.json()
-        d3.json('composers.json').then(function (data) {
-            // Получаем массив всех композиторов
-            var nationality = data.map(function (d) {
-                return d.Nationality;
-            });
-
-            // Используем d3.set() для получения уникальных значений
-            var uniqueNationality = d3.set(nationality).values();
-
-        // Выводим уникальные значения
-        d3.select("#nationalitySelect")
-            .selectAll("option")
-            .data(uniqueNationality)
-            .enter()
-            .append("option")
-            .attr("value", function(d) { return d; })
-            .text(function(d) { return d; });
-
-        });
-
-        // Load data from external file using fetch API
-        fetch('composers.json')
-            .then(response => response.json())
-            .then(data => {
-                // Once data is loaded, call displayData function
-                displayData(data);
-            })
-            .catch(error => console.error('Error loading data:', error));
-            var data_2 = data;
-
-        // Function to display data
-        function displayData(data) {
-
-            // Select the container element
-            var container = d3.select("#data_display");
-
-            // Create a table element
-            var table = container.append("table");
-
-            // Create table header
-            var thead = table.append("thead").append("tr");
-            thead.selectAll("th")
-                .data(d3.keys(data[0]))
-                // .data(composers_column)
-                .enter()
-                .append("th")
-                .text(function (d) { return d; });
-
-            // Create table body and rows
-            var tbody = table.append("tbody");
-            var rows = tbody.selectAll("tr")
-                .data(data)
-                .enter()
-                .append("tr");
-
-            // Create cells with data
-            rows.each(function (d) {
-                var row = d3.select(this);
-                d3.values(d).forEach(function (value) {
-                    row.append("td").text(value);
-                });
-            });
-        }
-    </script>
-
     <!-- Filter Section -->
     <div id="filterSection">
         <label for="composers">Имя композитора:</label>
         <input type="nameComposers" id="composers" min="0">
         <label for="nationalitySelect">Страна:</label>
         <select id="nationalitySelect">
-            <option value="">Все</option>
+            <option value=""></option>
         </select>
         <label>Годы жизни:</label>
         <label for="minYearInput">от</label>
@@ -154,58 +86,15 @@
         <label for="maxYearInput">до</label>
         <input type="number" id="maxYearInput" min="0">
         <button id="applyFilterBtn" onclick="filterData()">Найти</button>
+        <button id="clearFilterBtn" onclick="clearFilter()">Очистить</button>
     </div>
 
     <!-- Filtered Data Display -->
-    <div id="filteredDataDisplay"></div>
+    <!-- <div id="filteredDataDisplay"></div> -->
 
     <div id="data_display"></div>
-
-    <script>
-        // Function to filter data
-        function filterData() {
-
-            var nationality = document.getElementById("nationalitySelect").value;
-            var minYear = parseInt(document.getElementById("minYearInput").value);
-            var maxYear = parseInt(document.getElementById("maxYearInput").value);
-
-            var filteredData = data.filter(function (d) {
-                return (nationality === "" || d.Nationality === nationality) &&
-                    (isNaN(minYear) || d.Born >= minYear) &&
-                    (isNaN(maxYear) || d.Died <= maxYear);
-            });
-
-            displayFilteredData(filteredData);
-        }
-
-        // Function to display filtered data
-        function displayFilteredData(filteredData) {
-            var container = d3.select("#filteredDataDisplay");
-            container.html(""); // Clear previous content
-
-            var table = container.append("table");
-
-            var thead = table.append("thead").append("tr");
-            thead.selectAll("th")
-                .data(d3.keys(filteredData[0]))
-                .enter()
-                .append("th")
-                .text(function (d) { return d; });
-
-            var tbody = table.append("tbody");
-            var rows = tbody.selectAll("tr")
-                .data(filteredData)
-                .enter()
-                .append("tr");
-
-            rows.each(function (d) {
-                var row = d3.select(this);
-                d3.values(d).forEach(function (value) {
-                    row.append("td").text(value);
-                });
-            });
-        }
-    </script>
 </body>
+
+<script src="/script.js"></script>
 
 </html>
